@@ -21,11 +21,6 @@ const MIME_TYPES = [
   'video/webm'
 ]
 
-const CONSTRAINTS = {
-  audio: true,
-  video: true
-}
-
 const Wrapper = styled.div`
   position: relative;
   display: flex;
@@ -69,6 +64,8 @@ export default class VideoRecorder extends Component {
     countdownTime: PropTypes.number,
     /** Use this if you want to set a time limit for the video (in ms) */
     timeLimit: PropTypes.number,
+    /** Use this to set media stream constraints https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints */
+    constraints: PropTypes.object,
 
     renderDisconnectedView: PropTypes.func,
     renderVideoInputView: PropTypes.func,
@@ -94,7 +91,11 @@ export default class VideoRecorder extends Component {
     renderDisconnectedView: () => <DisconnectedView />,
     renderLoadingView: () => <LoadingView />,
     renderActions,
-    countdownTime: 3000
+    countdownTime: 3000,
+    constraints: {
+      audio: true,
+      video: true
+    }
   }
 
   constructor (props) {
@@ -187,7 +188,7 @@ export default class VideoRecorder extends Component {
     })
 
     navigator.mediaDevices
-      .getUserMedia(CONSTRAINTS)
+      .getUserMedia(this.props.constraints)
       .then(this.handleSuccess)
       .catch(this.handleError)
   }
