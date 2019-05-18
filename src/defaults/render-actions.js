@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from './button'
 import RecordButton from './record-button'
+import CaptureButton from './capture-button'
+import CloseButton from './close-button'
 import StopButton from './stop-button'
 import Timer from './timer'
 import Countdown from './countdown'
@@ -30,6 +32,7 @@ export default ({
   countdownTime,
   timeLimit,
   isReplayingVideo,
+  isCreatingThumbnail,
 
   onTurnOnCamera,
   onTurnOffCamera,
@@ -37,6 +40,8 @@ export default ({
   onStartRecording,
   onStopRecording,
   onStopReplaying,
+  onCapture,
+  onStopCapture,
   onConfirm
 }) => {
   const renderContent = () => {
@@ -52,11 +57,22 @@ export default ({
       return null
     }
 
+    if (isCreatingThumbnail) {
+      return (
+        <React.Fragment>
+          <CloseButton onClick={onStopCapture} data-qa='start-close-capture' />
+          <CaptureButton onClick={onCapture} data-qa='start-capture' />
+        </React.Fragment>
+      )
+    }
+
     if (isReplayingVideo) {
       return (
-        <Button onClick={onStopReplaying} data-qa='start-replaying'>
-          Record another video
-        </Button>
+        <React.Fragment>
+          <Button onClick={onStopReplaying} data-qa='start-replaying'>
+            Record another video
+          </Button>
+        </React.Fragment>
       )
     }
 

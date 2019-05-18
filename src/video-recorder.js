@@ -132,6 +132,8 @@ export default class VideoRecorder extends Component {
     this.renderCameraView = this.renderCameraView.bind(this)
     this.handleVideoSelected = this.handleVideoSelected.bind(this)
     this.handleOpenVideoInput = this.handleOpenVideoInput.bind(this)
+    this.handleCapture = this.handleCapture.bind(this)
+    this.handleCloseCapture = this.handleCloseCapture.bind(this)
 
     this.timeSinceInactivity = 0
   }
@@ -461,6 +463,16 @@ export default class VideoRecorder extends Component {
     }
   }
 
+  handleCapture () {
+    captureThumb(this.replayVideo).then(thumbnail => {
+      this.props.onCaptureThumbnail(thumbnail)
+    })
+  }
+
+  handleCloseCapture () {
+    this.props.onCloseThumbnailMode()
+  }
+
   renderCameraView () {
     const {
       renderDisconnectedView,
@@ -557,7 +569,12 @@ export default class VideoRecorder extends Component {
       isReplayVideoMuted
     } = this.state
 
-    const { countdownTime, timeLimit, renderActions } = this.props
+    const {
+      countdownTime,
+      timeLimit,
+      renderActions,
+      isCreatingThumbnail
+    } = this.props
 
     return (
       <Wrapper>
@@ -575,13 +592,16 @@ export default class VideoRecorder extends Component {
           isReplayVideoMuted,
           countdownTime,
           timeLimit,
+          isCreatingThumbnail,
 
           onTurnOnCamera: this.turnOnCamera,
           onTurnOffCamera: this.turnOffCamera,
           onOpenVideoInput: this.handleOpenVideoInput,
           onStartRecording: this.handleStartRecording,
           onStopRecording: this.handleStopRecording,
-          onStopReplaying: this.handleStopReplaying
+          onStopReplaying: this.handleStopReplaying,
+          onCapture: this.handleCapture,
+          onStopCapture: this.handleCloseCapture
         })}
       </Wrapper>
     )
