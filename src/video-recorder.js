@@ -290,6 +290,9 @@ export default class VideoRecorder extends Component {
     if (this.isDataHealthOK(event)) {
       this.recordedBlobs.push(event.data)
     }
+    if (this.props.onGetDataAvailable) {
+      this.props.onGetDataAvailable(event.data)
+    }
   }
 
   handleStopRecording () {
